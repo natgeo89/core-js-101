@@ -53,8 +53,12 @@ function parseDataFromIso8601(/* value */) {
  *    Date(2012,1,1)    => true
  *    Date(2015,1,1)    => false
  */
-function isLeapYear(/* date */) {
-  throw new Error('Not implemented');
+function isLeapYear(date) {
+  const year = date.getFullYear();
+  if (year % 4 !== 0) return false;
+  if (year % 100 !== 0) return true;
+  if (year % 400 !== 0) return false;
+  return true;
 }
 
 
@@ -73,8 +77,24 @@ function isLeapYear(/* date */) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,10,0,0,250)     => "00:00:00.250"
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
-function timeSpanToString(/* startDate, endDate */) {
-  throw new Error('Not implemented');
+function timeSpanToString(startDate, endDate) {
+  const calcDif = (a, b) => b - a;
+  const addZeroes = (n, pattern) => {
+    let zeroes = '';
+    if (pattern === 2) {
+      if (n < 10) zeroes = '0';
+    }
+    if (pattern === 3) {
+      if (n < 100) zeroes = '0';
+      if (n < 10) zeroes = '00';
+    }
+    return `${zeroes}${n}`;
+  };
+  const resultStr = `${addZeroes(calcDif(startDate.getHours(), endDate.getHours()), 2)}:
+  ${addZeroes(calcDif(startDate.getMinutes(), endDate.getMinutes()), 2)}:
+  ${addZeroes(calcDif(startDate.getSeconds(), endDate.getSeconds()), 2)}.
+  ${addZeroes(calcDif(startDate.getMilliseconds(), endDate.getMilliseconds()), 3)}`.replace(/\n\s+/g, '');
+  return resultStr;
 }
 
 
